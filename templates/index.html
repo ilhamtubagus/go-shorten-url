@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-300">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit URL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      };
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen transition-colors duration-300 relative">
+
+<!-- Theme Toggle -->
+<button id="themeToggle" class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition text-xl">
+    <span id="themeIcon">🌙</span>
+</button>
+
+<!-- Main content -->
+<div class="flex items-center justify-center h-screen w-full">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md w-full max-w-sm">
+        <h2 class="text-lg font-semibold mb-4">Submit a URL</h2>
+
+        <form id="urlForm" action="/url" method="POST" class="flex flex-col sm:flex-row gap-3">
+            <input
+                    type="text"
+                    name="userInput"
+                    id="userInput"
+                    placeholder="Enter a valid URL..."
+                    class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+                Submit
+            </button>
+        </form>
+
+        <!-- Error Message -->
+        <p id="errorMsg" class="mt-2 text-sm text-red-600 hidden">Please enter a valid URL.</p>
+    </div>
+</div>
+
+<script>
+  // Cookie-based theme
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  const icon = document.getElementById("themeIcon");
+  const root = document.documentElement;
+  const savedTheme = getCookie("theme");
+
+  if (savedTheme === "dark") {
+    root.classList.add("dark");
+    icon.textContent = "☀️";
+  } else {
+    root.classList.remove("dark");
+    icon.textContent = "🌙";
+  }
+
+  document.getElementById("themeToggle").addEventListener("click", () => {
+    const isDark = root.classList.toggle("dark");
+    document.cookie = `theme=${isDark ? "dark" : "light"}; path=/; max-age=31536000`;
+    icon.textContent = isDark ? "☀️" : "🌙";
+  });
+
+  // URL validation
+  const form = document.getElementById("urlForm");
+  const input = document.getElementById("userInput");
+  const errorMsg = document.getElementById("errorMsg");
+
+  form.addEventListener("submit", (e) => {
+    const value = input.value.trim();
+
+    try {
+      const url = new URL(value);
+      if (!url.protocol.startsWith("http")) throw new Error("Invalid protocol");
+      errorMsg.classList.add("hidden"); // Hide error
+    } catch {
+      e.preventDefault(); // Stop form submission
+      errorMsg.classList.remove("hidden"); // Show error
+    }
+  });
+</script>
+</body>
+</html>
