@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-300">
+<head>
+    <meta charset="UTF-8">
+    <title>Shortened URL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      };
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen flex items-center justify-center transition-colors duration-300 relative">
+
+<!-- Toast Notification -->
+<div id="toast" class="fixed top-4 right-4 z-50 hidden items-center bg-green-100 dark:bg-green-700 text-green-800 dark:text-white text-sm px-4 py-3 rounded-lg shadow-md transition-opacity duration-300">
+    <span>Copied to clipboard!</span>
+    <button onclick="hideToast()" class="ml-4 text-lg leading-none hover:text-red-500">&times;</button>
+</div>
+
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md w-full max-w-md text-center">
+    <h2 class="text-2xl font-semibold mb-4">Shortened URL</h2>
+
+    <!-- Display Short URL -->
+    <div class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-700 mb-4">
+        <div class="flex-grow mr-3 overflow-y-auto max-h-24 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+    <span id="shortUrl" class="block text-blue-600 dark:text-blue-400 break-all">
+      {{.ShortenedURL}}
+    </span>
+        </div>
+        <button
+                onclick="copyToClipboard()"
+                class="flex-shrink-0 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition"
+        >
+            Copy
+        </button>
+    </div>
+
+    <a href="/" class="inline-block mt-2 text-blue-600 hover:underline dark:text-blue-400">
+        Create another
+    </a>
+</div>
+
+<script>
+  // Dark theme from cookie
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  if (getCookie("theme") === "dark") {
+    document.documentElement.classList.add("dark");
+  }
+
+  function copyToClipboard() {
+    const url = document.getElementById("shortUrl").textContent;
+    navigator.clipboard.writeText(url).then(() => {
+      showToast();
+    });
+  }
+
+  function showToast() {
+    const toast = document.getElementById("toast");
+    toast.classList.remove("hidden");
+    toast.classList.add("flex");
+
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      hideToast();
+    }, 2500);
+  }
+
+  function hideToast() {
+    const toast = document.getElementById("toast");
+    toast.classList.add("hidden");
+    toast.classList.remove("flex");
+  }
+</script>
+</body>
+</html>

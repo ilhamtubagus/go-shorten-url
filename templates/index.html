@@ -22,11 +22,11 @@
     <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md w-full max-w-sm">
         <h2 class="text-lg font-semibold mb-4">Submit a URL</h2>
 
-        <form id="urlForm" action="/url" method="POST" class="flex flex-col sm:flex-row gap-3">
+        <form id="urlForm" action="/shorten" method="POST" class="flex flex-col sm:flex-row gap-3">
             <input
                     type="text"
-                    name="userInput"
-                    id="userInput"
+                    name="originalURL"
+                    id="originalURL"
                     placeholder="Enter a valid URL..."
                     class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
