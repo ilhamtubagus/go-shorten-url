@@ -5,25 +5,20 @@ import (
 	"github.com/ilhamtubagus/go-shorten-url/entity"
 	"github.com/ilhamtubagus/go-shorten-url/repository"
 	"github.com/ilhamtubagus/go-shorten-url/routes"
-	_ "github.com/ilhamtubagus/go-shorten-url/routes"
 	"github.com/ilhamtubagus/go-shorten-url/server"
 	"github.com/ilhamtubagus/go-shorten-url/services"
 	"github.com/joho/godotenv"
 	"github.com/julienschmidt/httprouter"
-	_ "github.com/julienschmidt/httprouter"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
-
-	//"html/template"
-	"log"
-	_ "net/http"
 )
 
 func init() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("error loading .env file")
 	}
 }
 
@@ -48,7 +43,7 @@ func main() {
 
 	host := fmt.Sprintf("%s:%s", os.Getenv("SERVICE_HOST"), os.Getenv("SERVICE_PORT"))
 
-	log.Printf("Server running on %s\n", host)
+	log.Printf("server running on %s\n", host)
 
 	err := http.ListenAndServe(host, router)
 	if err != nil {
