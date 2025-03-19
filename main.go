@@ -26,9 +26,11 @@ func main() {
 	tmpl := template.Must(template.New("").ParseGlob("./templates/*"))
 
 	redisClient := server.ConnectRedisClient()
+	mongoClient := server.ConnectMongoClient()
 
 	shortenRedisCache := repository.NewRedisCache[entity.ShortenedURL](redisClient)
-	shortenRepository := repository.NewShortenedRepository(shortenRedisCache)
+	shortenCollection := mongoClient.Database("shorten").Collection("shorten")
+	shortenRepository := repository.NewShortenedRepository(shortenRedisCache, shortenCollection)
 
 	shortenService := services.NewShortenedService(shortenRepository)
 

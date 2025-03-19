@@ -12,8 +12,8 @@ var (
 )
 
 type ShortenedURL struct {
-	ShortenedURL string `json:"shortenedURL"`
-	OriginalURL  string `json:"originalURL"`
+	ShortenedURL string `json:"shortenedURL" bson:"shortenedURL"`
+	OriginalURL  string `json:"originalURL" bson:"originalURL"`
 }
 
 func (s *ShortenedURL) GenerateShortCode() string {

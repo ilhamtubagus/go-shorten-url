@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ilhamtubagus/go-shorten-url/constants"
 	"github.com/redis/go-redis/v9"
+	"log"
 	"time"
 )
 
@@ -31,7 +33,7 @@ func (rc *RedisCache[T]) Get(ctx context.Context, key string) (T, error) {
 	var result T
 	val, err := rc.client.Get(ctx, key).Result()
 	if errors.Is(err, redis.Nil) {
-		return result, fmt.Errorf("key not found")
+		return result, constants.ErrorCacheNotFound
 	} else if err != nil {
 		return result, err
 	}
@@ -41,6 +43,8 @@ func (rc *RedisCache[T]) Get(ctx context.Context, key string) (T, error) {
 	if err != nil {
 		return result, fmt.Errorf("failed to unmarshal data: %w", err)
 	}
+
+	log.Println("cache", result)
 
 	return result, nil
 }

@@ -76,6 +76,10 @@ func (routes *Routes) RedirectURL() httprouter.Handle {
 		}
 
 		// Redirect to the original URL
+		log.Printf("redirecting to %s from %s\n", shortenedURL.OriginalURL, shortenedURL.ShortenedURL)
+
 		http.Redirect(w, r, shortenedURL.OriginalURL, http.StatusFound)
+
+		return
 	}
 }
