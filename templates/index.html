@@ -20,14 +20,14 @@
 <!-- Main content -->
 <div class="flex items-center justify-center h-screen w-full">
     <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md w-full max-w-sm">
-        <h2 class="text-lg font-semibold mb-4">Submit a URL</h2>
+        <h2 class="text-lg font-semibold mb-4">Shortkeun YoURL </h2>
 
         <form id="urlForm" action="/shorten" method="POST" class="flex flex-col sm:flex-row gap-3">
             <input
                     type="text"
                     name="originalURL"
                     id="originalURL"
-                    placeholder="Enter a valid URL..."
+                    placeholder="Your valid URL ..."
                     class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
@@ -40,6 +40,12 @@
 
         <!-- Error Message -->
         <p id="errorMsg" class="mt-2 text-sm text-red-600 hidden">Please enter a valid URL.</p>
+
+        <hr class="w-full border-t border-gray-300 dark:border-gray-600 my-6" />
+
+        <a href="/list" class="mt-6 inline-block px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition">
+            Go to List
+        </a>
     </div>
 </div>
 
@@ -71,7 +77,7 @@
 
   // URL validation
   const form = document.getElementById("urlForm");
-  const input = document.getElementById("userInput");
+  const input = document.getElementById("originalURL");
   const errorMsg = document.getElementById("errorMsg");
 
   form.addEventListener("submit", (e) => {
@@ -85,6 +91,10 @@
       e.preventDefault(); // Stop form submission
       errorMsg.classList.remove("hidden"); // Show error
     }
+  });
+
+  input.addEventListener("input", () => {
+    errorMsg.classList.add("hidden"); // Hide error on input change
   });
 </script>
 </body>
