@@ -40,8 +40,9 @@ func main() {
 	router.NotFound = http.HandlerFunc(routesDefs.NotFound())
 
 	router.GET("/", routesDefs.Index())
-	router.POST("/shorten", routesDefs.ShortenURL())
-	router.GET("/:shortCode", routesDefs.RedirectURL())
+	router.POST("/shorten-url", routesDefs.ShortenURL())
+	router.GET("/shorten-url", routesDefs.ListShortenedURLs())
+	router.GET("/s/:shortCode", routesDefs.RedirectURL())
 
 	host := fmt.Sprintf("%s:%s", os.Getenv("SERVICE_HOST"), os.Getenv("SERVICE_PORT"))
 

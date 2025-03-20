@@ -13,6 +13,7 @@ import (
 type ShortenedService interface {
 	ShortenURL(ctx context.Context, originalURL string) (*entity.ShortenedURL, error)
 	GetByShortCode(ctx context.Context, shortcode string) (*entity.ShortenedURL, error)
+	ListShortenedURLs(ctx context.Context) (*[]entity.ShortenedURL, error)
 }
 
 type ShortenedServiceIml struct {
@@ -71,4 +72,17 @@ func (s *ShortenedServiceIml) GetByShortCode(ctx context.Context, shortcode stri
 	}
 
 	return shorten, nil
+}
+
+func (s *ShortenedServiceIml) ListShortenedURLs(ctx context.Context) (*[]entity.ShortenedURL, error) {
+	shortenedURLs, err := s.repository.GetShortenedURLs(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range *shortenedURLs {
+		_ = (*shortenedURLs)[i].GenerateShortenedURL()
+	}
+
+	return shortenedURLs, nil
 }

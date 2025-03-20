@@ -87,3 +87,19 @@ func (routes *Routes) RedirectURL() httprouter.Handle {
 		return
 	}
 }
+
+func (routes *Routes) ListShortenedURLs() httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		shortenedURLs, err := routes.service.ListShortenedURLs(r.Context())
+
+		if err != nil {
+			log.Print(err)
+		}
+
+		err = routes.template.ExecuteTemplate(w, "list.html", shortenedURLs)
+
+		if err != nil {
+			log.Print(err)
+		}
+	}
+}

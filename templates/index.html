@@ -9,6 +9,11 @@
         darkMode: 'class',
       };
     </script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen transition-colors duration-300 relative">
 
@@ -22,7 +27,7 @@
     <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md w-full max-w-sm">
         <h2 class="text-lg font-semibold mb-4">Shortkeun YoURL </h2>
 
-        <form id="urlForm" action="/shorten" method="POST" class="flex flex-col sm:flex-row gap-3">
+        <form id="urlForm" action="/shorten-url" method="POST" class="flex flex-col sm:flex-row gap-3">
             <input
                     type="text"
                     name="originalURL"
@@ -43,7 +48,7 @@
 
         <hr class="w-full border-t border-gray-300 dark:border-gray-600 my-6" />
 
-        <a href="/list" class="mt-6 inline-block px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition">
+        <a href="/shorten-url" class="mt-6 inline-block px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition">
             Go to List
         </a>
     </div>

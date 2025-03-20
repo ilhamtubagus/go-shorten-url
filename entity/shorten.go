@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/ilhamtubagus/go-shorten-url/util"
+	"html/template"
 	"math/big"
 	"os"
 )
@@ -47,8 +48,12 @@ func (s *ShortenedURL) GenerateShortenedURL() error {
 		return fmt.Errorf("short code not specified")
 	}
 
-	host := fmt.Sprintf("%s:%s", os.Getenv("SERVICE_HOST"), os.Getenv("SERVICE_PORT"))
-	s.ShortenedURL = fmt.Sprintf("%s/%s", host, s.ShortCode)
+	host := fmt.Sprintf("%s://%s:%s", os.Getenv("SERVICE_PROTOCOL"), os.Getenv("SERVICE_HOST"), os.Getenv("SERVICE_PORT"))
+	s.ShortenedURL = fmt.Sprintf("%s/s/%s", host, s.ShortCode)
 
 	return nil
+}
+
+func (s *ShortenedURL) SafeShortenedURL() template.URL {
+	return template.URL(s.ShortenedURL)
 }

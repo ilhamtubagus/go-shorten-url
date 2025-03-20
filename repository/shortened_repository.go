@@ -116,6 +116,20 @@ func (i *ShortenedRepositoryIml) Insert(ctx context.Context, shortenedURL entity
 }
 
 func (i *ShortenedRepositoryIml) GetShortenedURLs(ctx context.Context) (*[]entity.ShortenedURL, error) {
-	// todo : retrieve from MongoDB
-	return nil, nil
+	log.Println("getting all shortened URLs from mongodb")
+
+	var shortenedURLs []entity.ShortenedURL
+	filter := bson.D{}
+	cursor, err := i.col.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := cursor.All(ctx, &shortenedURLs); err != nil {
+		panic(err)
+	}
+
+	log.Println("success get all shortened URLs from mongodb")
+
+	return &shortenedURLs, nil
 }
