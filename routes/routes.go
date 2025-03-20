@@ -1,13 +1,13 @@
 package routes
 
 import (
-	"fmt"
+	"context"
 	"github.com/ilhamtubagus/go-shorten-url/services"
 	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
+	"time"
 )
 
 type Routes struct {
@@ -41,11 +41,12 @@ func (routes *Routes) NotFound() http.HandlerFunc {
 
 func (routes *Routes) ShortenURL() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		originalURL := r.FormValue("originalURL")
-		shortenedURL, err := routes.service.ShortenURL(originalURL)
+		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+		defer cancel()
 
-		host := fmt.Sprintf("%s:%s", os.Getenv("SERVICE_HOST"), os.Getenv("SERVICE_PORT"))
-		shortenedURL.ShortenedURL = fmt.Sprintf("%s/%s", host, shortenedURL.ShortenedURL)
+		originalURL := r.FormValue("originalURL")
+
+		shortenedURL, err := routes.service.ShortenURL(ctx, originalURL)
 
 		if err != nil {
 			log.Print(err)
@@ -61,10 +62,13 @@ func (routes *Routes) ShortenURL() httprouter.Handle {
 
 func (routes *Routes) RedirectURL() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+		defer cancel()
+
 		shortCode := ps.ByName("shortCode")
 
 		// Get the original URL from the service
-		shortenedURL, err := routes.service.GetByShortCode(shortCode)
+		shortenedURL, err := routes.service.GetByShortCode(ctx, shortCode)
 		if err != nil {
 			err := routes.template.ExecuteTemplate(w, "404.html", nil)
 
@@ -78,7 +82,7 @@ func (routes *Routes) RedirectURL() httprouter.Handle {
 		// Redirect to the original URL
 		log.Printf("redirecting to %s from %s\n", shortenedURL.OriginalURL, shortenedURL.ShortenedURL)
 
-		http.Redirect(w, r, shortenedURL.OriginalURL, http.StatusFound)
+		http.Redirect(w, r, shortenedURL.OriginalURL, http.StatusSeeOther)
 
 		return
 	}
