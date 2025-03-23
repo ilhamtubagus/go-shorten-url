@@ -14,6 +14,7 @@ type ShortenedService interface {
 	ShortenURL(ctx context.Context, originalURL string) (*entity.ShortenedURL, error)
 	GetByShortCode(ctx context.Context, shortcode string) (*entity.ShortenedURL, error)
 	ListShortenedURLs(ctx context.Context) (*[]entity.ShortenedURL, error)
+	DeleteShortenedURL(ctx context.Context, shortcode string) error
 }
 
 type ShortenedServiceIml struct {
@@ -85,4 +86,13 @@ func (s *ShortenedServiceIml) ListShortenedURLs(ctx context.Context) (*[]entity.
 	}
 
 	return shortenedURLs, nil
+}
+
+func (s *ShortenedServiceIml) DeleteShortenedURL(ctx context.Context, shortcode string) error {
+	err := s.repository.DeleteByShortCode(ctx, shortcode)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

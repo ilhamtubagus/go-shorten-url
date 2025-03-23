@@ -17,6 +17,7 @@ type ShortenedRepository interface {
 	GetByShortCode(ctx context.Context, shortcode string) (*entity.ShortenedURL, error)
 	Insert(ctx context.Context, payload entity.ShortenedURL) error
 	GetShortenedURLs(ctx context.Context) (*[]entity.ShortenedURL, error)
+	DeleteByShortCode(ctx context.Context, shortCode string) error
 }
 
 type ShortenedRepositoryIml struct {
@@ -132,4 +133,18 @@ func (i *ShortenedRepositoryIml) GetShortenedURLs(ctx context.Context) (*[]entit
 	log.Println("success get all shortened URLs from mongodb")
 
 	return &shortenedURLs, nil
+}
+
+func (i *ShortenedRepositoryIml) DeleteByShortCode(ctx context.Context, shortCode string) error {
+	filter := bson.D{{"shortCode", shortCode}}
+	if _, err := i.col.DeleteOne(ctx, filter); err != nil {
+		return err
+	}
+
+	err := i.cache.Delete(ctx, shortCode)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
