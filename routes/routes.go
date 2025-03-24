@@ -112,7 +112,18 @@ func (routes *Routes) DeleteShortenedURL() httprouter.Handle {
 		if err != nil {
 			log.Print(err)
 		}
+	}
+}
 
-		routes.ListShortenedURLs()(w, r, p)
+func (routes *Routes) UpdateShortenedURL() httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		shortCode := p.ByName("shortCode")
+		newOriginalURL := r.FormValue("newOriginalURL")
+
+		_, err := routes.service.UpdateShortenedURL(r.Context(), shortCode, newOriginalURL)
+
+		if err != nil {
+			log.Print(err)
+		}
 	}
 }

@@ -18,6 +18,7 @@ type ShortenedRepository interface {
 	Insert(ctx context.Context, payload entity.ShortenedURL) error
 	GetShortenedURLs(ctx context.Context) (*[]entity.ShortenedURL, error)
 	DeleteByShortCode(ctx context.Context, shortCode string) error
+	UpdateByShortCode(ctx context.Context, shortCode string, newOriginalURL string) (*entity.ShortenedURL, error)
 }
 
 type ShortenedRepositoryIml struct {
@@ -147,4 +148,19 @@ func (i *ShortenedRepositoryIml) DeleteByShortCode(ctx context.Context, shortCod
 	}
 
 	return nil
+}
+
+func (i *ShortenedRepositoryIml) UpdateByShortCode(ctx context.Context, shortCode string, newOriginalURL string) (*entity.ShortenedURL, error) {
+	filter := bson.D{{"shortCode", shortCode}}
+	update := bson.D{{"$set", bson.D{{"originalURL", newOriginalURL}}}}
+	var shortened entity.ShortenedURL
+
+	err := i.col.FindOneAndUpdate(ctx, filter, update).Decode(&shortened)
+	if err != nil {
+		return nil, err
+	}
+
+	i.cacheTasks <- shortened
+
+	return &shortened, nil
 }

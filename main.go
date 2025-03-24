@@ -43,6 +43,7 @@ func main() {
 	router.POST("/shorten-url", routesDefs.ShortenURL())
 	router.GET("/shorten-url", routesDefs.ListShortenedURLs())
 	router.DELETE("/:shortCode", routesDefs.DeleteShortenedURL())
+	router.PATCH("/:shortCode", routesDefs.UpdateShortenedURL())
 	router.GET("/s/:shortCode", routesDefs.RedirectURL())
 
 	host := fmt.Sprintf("%s:%s", os.Getenv("SERVICE_HOST"), os.Getenv("SERVICE_PORT"))
