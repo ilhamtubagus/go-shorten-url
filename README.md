@@ -43,10 +43,18 @@ This is a URL shortener application built with Go. It allows users to create sho
 2. Clone the repository.
 3. Create a `.env` file in the root directory with the following variables:
 ```
-SERVICE_HOST=localhost
-SERVICE_PORT=8080
-MONGODB_URI=your_mongodb_uri
-REDIS_ADDR=your_redis_address
+SERVICE_HOST=
+SERVICE_PORT=
+SERVICE_PROTOCOL=
+REDIS_HOST=
+REDIS_PORT=
+REDIS_PASSWORD=
+REDIS_TTL=
+MONGODB_USER=
+MONGODB_PASSWORD=
+MONGODB_HOST=
+MONGODB_DATABASE_NAME=
+MONGODB_OPTIONS=
 ```
 4. Run `go mod download` to install dependencies.
 5. Start the server with `go run main.go`.
