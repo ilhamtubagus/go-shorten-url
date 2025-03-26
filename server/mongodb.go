@@ -3,23 +3,23 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/ilhamtubagus/go-shorten-url/config"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"log"
-	"os"
 )
 
-func ConnectMongoClient() *mongo.Client {
+func ConnectMongoClient(mongoConfig config.MongoConfig) *mongo.Client {
 	connStr := fmt.Sprintf("mongodb://%s:%s@%s/%s?%s",
-		os.Getenv("MONGODB_USER"),
-		os.Getenv("MONGODB_PASSWORD"),
-		os.Getenv("MONGODB_HOST"),
-		os.Getenv("MONGODB_DATABASE_NAME"),
-		os.Getenv("MONGODB_OPTIONS"))
+		mongoConfig.User,
+		mongoConfig.Password,
+		mongoConfig.Host,
+		mongoConfig.Database,
+		mongoConfig.Options)
 
 	clientOptions := options.Client().ApplyURI(connStr)
 
-	log.Println("connecting to MongoDB server")
+	log.Println("connecting to MongoDB server", connStr)
 
 	client, err := mongo.Connect(clientOptions)
 	if err != nil {

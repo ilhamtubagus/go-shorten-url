@@ -57,7 +57,9 @@ func (rc *RedisCache[T]) Put(ctx context.Context, key string, val T, ttl uint64)
 	}
 
 	expiration := time.Duration(ttl) * time.Second
-	return rc.client.Set(ctx, key, jsonData, expiration).Err()
+	err = rc.client.Set(ctx, key, jsonData, expiration).Err()
+
+	return err
 }
 
 func (rc *RedisCache[T]) IsExist(ctx context.Context, key string) (bool, error) {

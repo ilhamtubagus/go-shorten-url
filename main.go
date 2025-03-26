@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	goenv "github.com/ilhamtubagus/go-env"
+	"github.com/ilhamtubagus/go-shorten-url/config"
 	"github.com/ilhamtubagus/go-shorten-url/entity"
 	"github.com/ilhamtubagus/go-shorten-url/repository"
 	"github.com/ilhamtubagus/go-shorten-url/routes"
@@ -15,22 +17,33 @@ import (
 	"os"
 )
 
+var appConfig = &config.Config{}
+
 func init() {
-	err := godotenv.Load()
+	if os.Getenv("ENV") == "development" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("error loading .env file")
+		}
+
+		log.Println("successfully loaded development environment variables")
+	}
+
+	err := goenv.Unmarshal(appConfig)
 	if err != nil {
-		log.Fatal("error loading .env file")
+		log.Fatal(err)
 	}
 }
 
 func main() {
 	tmpl := template.Must(template.New("").ParseGlob("./templates/*"))
 
-	redisClient := server.ConnectRedisClient()
-	mongoClient := server.ConnectMongoClient()
+	redisClient := server.ConnectRedisClient(appConfig.Redis)
+	mongoClient := server.ConnectMongoClient(appConfig.Mongo)
 
 	shortenRedisCache := repository.NewRedisCache[entity.ShortenedURL](redisClient)
 	shortenCollection := mongoClient.Database("shorten").Collection("shorten")
-	shortenRepository := repository.NewShortenedRepository(shortenRedisCache, shortenCollection)
+	shortenRepository := repository.NewShortenedRepository(shortenRedisCache, shortenCollection, *appConfig)
 
 	shortenService := services.NewShortenedService(shortenRepository)
 

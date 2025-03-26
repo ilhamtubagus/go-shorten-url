@@ -3,13 +3,13 @@ package repository
 import (
 	"context"
 	"errors"
+	"github.com/ilhamtubagus/go-shorten-url/config"
 	"github.com/ilhamtubagus/go-shorten-url/constants"
 	"github.com/ilhamtubagus/go-shorten-url/entity"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"log"
-	"os"
-	"strconv"
 	"time"
 )
 
@@ -25,13 +25,15 @@ type ShortenedRepositoryIml struct {
 	cache      Cache[entity.ShortenedURL]
 	col        *mongo.Collection
 	cacheTasks chan entity.ShortenedURL
+	config     config.Config
 }
 
-func NewShortenedRepository(cache Cache[entity.ShortenedURL], col *mongo.Collection) *ShortenedRepositoryIml {
+func NewShortenedRepository(cache Cache[entity.ShortenedURL], col *mongo.Collection, config config.Config) *ShortenedRepositoryIml {
 	repo := &ShortenedRepositoryIml{
 		cache:      cache,
 		col:        col,
 		cacheTasks: make(chan entity.ShortenedURL, 100),
+		config:     config,
 	}
 
 	// Start a fixed number of workers
@@ -54,13 +56,12 @@ func (i *ShortenedRepositoryIml) insertCache(shortenedURL entity.ShortenedURL) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	ttlString := os.Getenv("REDIS_TTL")
-	ttl, err := strconv.Atoi(ttlString)
+	err := i.cache.Delete(ctx, shortenedURL.ShortCode)
 	if err != nil {
-		log.Printf("error parsing int %v\n", err)
+		log.Printf("error deleting cache %v\n", err)
 	}
 
-	err = i.cache.Put(ctx, shortenedURL.ShortCode, shortenedURL, uint64(ttl))
+	err = i.cache.Put(ctx, shortenedURL.ShortCode, shortenedURL, uint64(i.config.Redis.TTL))
 	if err != nil {
 		log.Printf("error inserting cache %v\n", err)
 	}
@@ -155,7 +156,9 @@ func (i *ShortenedRepositoryIml) UpdateByShortCode(ctx context.Context, shortCod
 	update := bson.D{{"$set", bson.D{{"originalURL", newOriginalURL}}}}
 	var shortened entity.ShortenedURL
 
-	err := i.col.FindOneAndUpdate(ctx, filter, update).Decode(&shortened)
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+
+	err := i.col.FindOneAndUpdate(ctx, filter, update, opts).Decode(&shortened)
 	if err != nil {
 		return nil, err
 	}
