@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/alicebob/miniredis/v2"
-	"github.com/ilhamtubagus/go-shorten-url/constants"
+	"github.com/ilhamtubagus/shortenurl/constants"
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	"testing"

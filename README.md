@@ -13,6 +13,7 @@ This is a URL shortener application built with Go. It allows users to create sho
 ### Key Libraries
 
 - `github.com/joho/godotenv`: For loading environment variables from a .env file.
+- `github.com/ilhamtubagus/goenv`: Unmarshal environment variables into struct
 - `github.com/julienschmidt/httprouter`: A high-performance HTTP request router.
 - `github.com/redis/go-redis/v9`: Redis client for Go.
 - `go.mongodb.org/mongo-driver`: Official MongoDB driver for Go.
@@ -72,7 +73,8 @@ The server will start on the host and port specified in your `.env` file.
 
 ## Testing
 
-Run tests using the `go test` command in the project root directory.
+- Run tests using the `make test` command in the project root directory to run all test.
+- Run tests using the `make test/cover` command in the project root directory to run all test with coverage report.
 
 ## Contributing
 

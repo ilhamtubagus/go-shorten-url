@@ -2,7 +2,7 @@ package routes
 
 import (
 	"context"
-	"github.com/ilhamtubagus/go-shorten-url/services"
+	"github.com/ilhamtubagus/shortenurl/services"
 	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"log"

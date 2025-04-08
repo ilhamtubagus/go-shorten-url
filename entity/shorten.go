@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"github.com/ilhamtubagus/go-shorten-url/util"
+	"github.com/ilhamtubagus/shortenurl/util"
 	"html/template"
 	"math/big"
 	"os"

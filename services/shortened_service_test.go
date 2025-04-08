@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"errors"
-	"github.com/ilhamtubagus/go-shorten-url/entity"
+	"github.com/ilhamtubagus/shortenurl/entity"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/v2/mongo"

@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/ilhamtubagus/go-shorten-url/config"
+	"github.com/ilhamtubagus/shortenurl/config"
 	"github.com/redis/go-redis/v9"
 	"log"
 )

@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 	"errors"
-	"github.com/ilhamtubagus/go-shorten-url/entity"
-	"github.com/ilhamtubagus/go-shorten-url/repository"
+	"github.com/ilhamtubagus/shortenurl/entity"
+	"github.com/ilhamtubagus/shortenurl/repository"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"log"
 	"strconv"

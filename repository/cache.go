@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/ilhamtubagus/go-shorten-url/constants"
+	"github.com/ilhamtubagus/shortenurl/constants"
 	"github.com/redis/go-redis/v9"
 	"log"
 	"time"

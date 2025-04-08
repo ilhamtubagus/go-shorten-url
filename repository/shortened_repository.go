@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 	"errors"
-	"github.com/ilhamtubagus/go-shorten-url/config"
-	"github.com/ilhamtubagus/go-shorten-url/constants"
-	"github.com/ilhamtubagus/go-shorten-url/entity"
+	"github.com/ilhamtubagus/shortenurl/config"
+	"github.com/ilhamtubagus/shortenurl/constants"
+	"github.com/ilhamtubagus/shortenurl/entity"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
